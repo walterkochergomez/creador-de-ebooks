@@ -1,0 +1,113 @@
+/* Reseteo básico para que se vea igual en todos los navegadores */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f0f2f5;
+    color: #333;
+}
+
+.app-container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden; /* Evita scroll en toda la página, solo en el lienzo */
+}
+
+/* --- Panel Lateral --- */
+.sidebar {
+    width: 280px;
+    background-color: #ffffff;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+    z-index: 10;
+}
+
+.sidebar h2 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #1a1a1a;
+}
+
+.tools-section {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tool-btn {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.tool-btn:hover {
+    background-color: #e9ecef;
+    border-color: #ced4da;
+    transform: translateX(2px); /* Pequeño efecto al pasar el mouse */
+}
+
+.export-section {
+    margin-top: auto;
+}
+
+.export-btn {
+    width: 100%;
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.export-btn:hover {
+    background-color: #0b5ed7;
+}
+
+/* --- Área Central de Trabajo --- */
+.workspace {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #e4e6e9;
+}
+
+.workspace-header {
+    height: 60px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.canvas-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px;
+    overflow-y: auto; /* Permite hacer scroll si la hoja es muy alta */
+}
+
+/* La "Hoja" del E-book */
+#ebook-canvas {
+    background-color: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-radius: 2px;
+}
