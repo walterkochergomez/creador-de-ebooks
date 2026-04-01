@@ -3,39 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creador de E-Books Interactivos</title>
+    <title>Studio - Ebooks Interactivos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app-container">
         
-        <aside class="sidebar">
-            <h2>Herramientas</h2>
-            <div class="tools-section">
-                <button class="tool-btn" id="btn-upload">📄 Cargar Fondo Base</button>
-                <button class="tool-btn" id="btn-text">T Caja de Texto Rellenable</button>
-                <button class="tool-btn" id="btn-audio">🎵 Enlazar Audio</button>
-                <button class="tool-btn" id="btn-choice">☑️ Selección Múltiple</button>
-                <button class="tool-btn" id="btn-match">🔗 Términos Pareados</button>
+        <aside class="sidebar left-sidebar">
+            <div class="brand">
+                <i class="fas fa-layer-group"></i>
+                <h2>Ebook Studio</h2>
             </div>
-            
+            <div class="tools-section">
+                <button class="tool-btn" id="btn-upload"><i class="fas fa-file-pdf"></i> Fondo Base</button>
+                <button class="tool-btn" id="btn-text"><i class="fas fa-i-cursor"></i> Caja de Texto</button>
+                <button class="tool-btn" id="btn-audio"><i class="fas fa-music"></i> Audio</button>
+                <button class="tool-btn" id="btn-choice"><i class="fas fa-check-square"></i> Opción Múltiple</button>
+            </div>
             <div class="export-section">
-                <button class="export-btn" id="btn-export">🚀 Exportar Lección</button>
+                <button class="btn-primary" id="btn-export"><i class="fas fa-rocket"></i> Exportar Alumnos</button>
             </div>
         </aside>
 
         <main class="workspace">
             <header class="workspace-header">
-                <h3>Página 1 - Ejercicios de Vocabulario: Die Farben</h3>
+                <div class="page-controls">
+                    <button><i class="fas fa-chevron-left"></i></button>
+                    <span>Página 1 de 5</span>
+                    <button><i class="fas fa-chevron-right"></i></button>
+                </div>
             </header>
             
             <div class="canvas-container">
-                <canvas id="ebook-canvas" width="800" height="1131"></canvas>
-            </div>
+                <canvas id="ebook-canvas" width="794" height="1123"></canvas> </div>
         </main>
+
+        <aside class="sidebar right-sidebar" id="properties-panel" style="display: none;">
+            <h3>Propiedades</h3>
+            <div class="property-group">
+                <label for="correct-answer"><i class="fas fa-key"></i> Respuesta Correcta:</label>
+                <input type="text" id="correct-answer" placeholder="Ej: Hund">
+                <small>El alumno deberá escribir esto para obtener el punto.</small>
+            </div>
+            <div class="property-group">
+                <label for="points"><i class="fas fa-star"></i> Puntos:</label>
+                <input type="number" id="points" value="1" min="1">
+            </div>
+            <button class="btn-danger" id="btn-delete"><i class="fas fa-trash"></i> Eliminar Elemento</button>
+        </aside>
 
     </div>
     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
