@@ -10,47 +10,66 @@
 <body>
     <div class="app-container">
         
+        <input type="file" id="file-bg" accept="image/png, image/jpeg, application/pdf" style="display: none;">
+        
         <aside class="sidebar left-sidebar">
             <div class="brand">
                 <i class="fas fa-layer-group"></i>
                 <h2>Ebook Studio</h2>
             </div>
             <div class="tools-section">
-                <button class="tool-btn" id="btn-upload"><i class="fas fa-file-pdf"></i> Fondo Base</button>
+                <button class="tool-btn" id="btn-upload"><i class="fas fa-image"></i> Cargar Fondo</button>
                 <button class="tool-btn" id="btn-text"><i class="fas fa-i-cursor"></i> Caja de Texto</button>
-                <button class="tool-btn" id="btn-audio"><i class="fas fa-music"></i> Audio</button>
-                <button class="tool-btn" id="btn-choice"><i class="fas fa-check-square"></i> Opción Múltiple</button>
+                <button class="tool-btn" id="btn-audio"><i class="fas fa-music"></i> Botón de Audio</button>
+                <button class="tool-btn" id="btn-choice"><i class="fas fa-check-square"></i> Casilla (Checkbox)</button>
             </div>
             <div class="export-section">
-                <button class="btn-primary" id="btn-export"><i class="fas fa-rocket"></i> Exportar Alumnos</button>
+                <button class="btn-primary" id="btn-export"><i class="fas fa-rocket"></i> Exportar Lección</button>
             </div>
         </aside>
 
         <main class="workspace">
-            <header class="workspace-header">
-                <div class="page-controls">
-                    <button><i class="fas fa-chevron-left"></i></button>
-                    <span>Página 1 de 5</span>
-                    <button><i class="fas fa-chevron-right"></i></button>
-                </div>
-            </header>
-            
             <div class="canvas-container">
-                <canvas id="ebook-canvas" width="794" height="1123"></canvas> </div>
+                <div class="canvas-container-outer">
+                    <canvas id="ebook-canvas" width="794" height="1123"></canvas>
+                </div>
+            </div>
         </main>
 
         <aside class="sidebar right-sidebar" id="properties-panel" style="display: none;">
             <h3>Propiedades</h3>
-            <div class="property-group">
-                <label for="correct-answer"><i class="fas fa-key"></i> Respuesta Correcta:</label>
-                <input type="text" id="correct-answer" placeholder="Ej: Hund">
-                <small>El alumno deberá escribir esto para obtener el punto.</small>
+            
+            <div id="prop-text" style="display: none;">
+                <div class="property-group">
+                    <label><i class="fas fa-key"></i> Respuesta Correcta:</label>
+                    <input type="text" id="prop-text-answer" placeholder="Ej: der Apfel">
+                    <small>Ignora mayúsculas/minúsculas al evaluar.</small>
+                </div>
             </div>
-            <div class="property-group">
-                <label for="points"><i class="fas fa-star"></i> Puntos:</label>
-                <input type="number" id="points" value="1" min="1">
+
+            <div id="prop-audio" style="display: none;">
+                <div class="property-group">
+                    <label><i class="fas fa-link"></i> URL del Audio (MP3):</label>
+                    <input type="text" id="prop-audio-url" placeholder="https://ejemplo.com/audio.mp3">
+                    <small>Pega el enlace directo al archivo de sonido.</small>
+                </div>
             </div>
-            <button class="btn-danger" id="btn-delete"><i class="fas fa-trash"></i> Eliminar Elemento</button>
+
+            <div id="prop-choice" style="display: none;">
+                <div class="property-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="prop-choice-correct">
+                        ¿Es esta la respuesta correcta?
+                    </label>
+                </div>
+            </div>
+
+            <div class="property-group" style="margin-top: 20px;">
+                <label><i class="fas fa-star"></i> Puntos al acertar:</label>
+                <input type="number" id="prop-points" value="1" min="1">
+            </div>
+
+            <button class="btn-danger" id="btn-delete"><i class="fas fa-trash"></i> Eliminar</button>
         </aside>
 
     </div>
