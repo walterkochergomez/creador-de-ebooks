@@ -4,21 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Studio - Ebooks Interactivos</title>
+    <!-- Iconos de FontAwesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Tu archivo de estilos -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app-container">
         
+        <!-- Input oculto para subir el PDF o Imagen base -->
         <input type="file" id="file-bg" accept="image/png, image/jpeg, application/pdf" style="display: none;">
         
+        <!-- PANEL LATERAL IZQUIERDO (Herramientas) -->
         <aside class="sidebar left-sidebar">
             <div class="brand">
                 <i class="fas fa-layer-group"></i>
                 <h2>Ebook Studio</h2>
             </div>
             <div class="tools-section">
-                <button class="tool-btn" id="btn-upload"><i class="fas fa-image"></i> Cargar Fondo</button>
+                <button class="tool-btn" id="btn-upload"><i class="fas fa-file-pdf"></i> Cargar Fondo</button>
                 <button class="tool-btn" id="btn-text"><i class="fas fa-i-cursor"></i> Caja de Texto</button>
                 <button class="tool-btn" id="btn-audio"><i class="fas fa-music"></i> Botón de Audio</button>
                 <button class="tool-btn" id="btn-choice"><i class="fas fa-check-square"></i> Casilla (Checkbox)</button>
@@ -28,17 +32,31 @@
             </div>
         </aside>
 
+        <!-- ÁREA DE TRABAJO CENTRAL -->
         <main class="workspace">
+            <!-- Controles de Paginación -->
+            <header class="workspace-header">
+                <div class="page-controls">
+                    <button id="btn-prev-page" title="Página Anterior"><i class="fas fa-chevron-left"></i></button>
+                    <span id="page-indicator">Página 1 de 1</span>
+                    <button id="btn-next-page" title="Página Siguiente"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </header>
+            
+            <!-- Lienzo -->
             <div class="canvas-container">
                 <div class="canvas-container-outer">
+                    <!-- Tamaño estándar A4 (794x1123 px) -->
                     <canvas id="ebook-canvas" width="794" height="1123"></canvas>
                 </div>
             </div>
         </main>
 
+        <!-- PANEL LATERAL DERECHO (Propiedades Dinámicas) -->
         <aside class="sidebar right-sidebar" id="properties-panel" style="display: none;">
             <h3>Propiedades</h3>
             
+            <!-- Propiedades de Texto -->
             <div id="prop-text" style="display: none;">
                 <div class="property-group">
                     <label><i class="fas fa-key"></i> Respuesta Correcta:</label>
@@ -47,6 +65,7 @@
                 </div>
             </div>
 
+            <!-- Propiedades de Audio -->
             <div id="prop-audio" style="display: none;">
                 <div class="property-group">
                     <label><i class="fas fa-link"></i> URL del Audio (MP3):</label>
@@ -55,6 +74,7 @@
                 </div>
             </div>
 
+            <!-- Propiedades de Opción Múltiple -->
             <div id="prop-choice" style="display: none;">
                 <div class="property-group checkbox-group">
                     <label>
@@ -64,19 +84,23 @@
                 </div>
             </div>
 
+            <!-- Propiedades Generales (Puntos) -->
             <div class="property-group" style="margin-top: 20px;">
                 <label><i class="fas fa-star"></i> Puntos al acertar:</label>
                 <input type="number" id="prop-points" value="1" min="1">
             </div>
 
-            <button class="btn-danger" id="btn-delete"><i class="fas fa-trash"></i> Eliminar</button>
+            <!-- Botón Eliminar -->
+            <button class="btn-danger" id="btn-delete"><i class="fas fa-trash"></i> Eliminar Elemento</button>
         </aside>
 
     </div>
     
-    <!-- NUEVO: Librería para leer PDFs -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <!-- Librerías Externas requeridas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    
+    <!-- Tu archivo de lógica -->
     <script src="script.js"></script>
 </body>
 </html>
