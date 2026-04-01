@@ -129,14 +129,37 @@ document.getElementById('btn-text').addEventListener('click', () => {
     canvas.add(text); canvas.setActiveObject(text);
 });
 
+// --- 4. HERRAMIENTA: BOTÓN DE AUDIO ---
 document.getElementById('btn-audio').addEventListener('click', () => {
-    const audioBtn = new fabric.IText('🔊 Reproducir', {
-        left: 150, top: 150, fontSize: 18, fontFamily: 'Inter',
-        fill: '#ffffff', backgroundColor: '#3b82f6', padding: 12, rx: 5, ry: 5,
-        editable: false, borderColor: '#3b82f6', cornerColor: '#3b82f6', transparentCorners: false,
+    const audioBtn = new fabric.IText('▶️ Escuchar audio', {
+        left: 150, 
+        top: 150, 
+        fontSize: 18, 
+        fontFamily: 'Inter',
+        fontWeight: 'bold',      // Letra más gruesa
+        fill: '#ffffff',         // Color del texto (blanco)
+        backgroundColor: '#10b981', // Verde esmeralda estilo "botón de play"
+        padding: 12,             // Más espacio interno
+        
+        // ¡LA MAGIA PARA PODER EDITAR EL TEXTO!
+        editable: true,          
+        
+        // Efecto de sombra para que parezca un botón real
+        shadow: new fabric.Shadow({
+            color: 'rgba(0,0,0,0.3)',
+            blur: 4,
+            offsetX: 2,
+            offsetY: 2
+        }),
+
+        borderColor: '#3b82f6', 
+        cornerColor: '#3b82f6', 
+        transparentCorners: false,
         customData: { type: 'audio', audioUrl: '', points: 0 }
     });
-    canvas.add(audioBtn); canvas.setActiveObject(audioBtn);
+    
+    canvas.add(audioBtn); 
+    canvas.setActiveObject(audioBtn);
 });
 
 document.getElementById('btn-choice').addEventListener('click', () => {
