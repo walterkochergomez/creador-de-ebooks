@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creador de E-Books Interactivos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <aside class="sidebar">
+            <h2>Herramientas</h2>
+            <div class="tools-section">
+                <button class="tool-btn" id="btn-upload">📄 Cargar Fondo Base</button>
+                <button class="tool-btn" id="btn-text">T Caja de Texto Rellenable</button>
+                <button class="tool-btn" id="btn-audio">🎵 Enlazar Audio</button>
+                <button class="tool-btn" id="btn-choice">☑️ Selección Múltiple</button>
+                <button class="tool-btn" id="btn-match">🔗 Términos Pareados</button>
+            </div>
+            
+            <div class="export-section">
+                <button class="export-btn" id="btn-export">🚀 Exportar Lección</button>
+            </div>
+        </aside>
+
+        <main class="workspace">
+            <header class="workspace-header">
+                <h3>Página 1 - Ejercicios de Vocabulario: Die Farben</h3>
+            </header>
+            
+            <div class="canvas-container">
+                <canvas id="ebook-canvas" width="800" height="1131"></canvas>
+            </div>
+        </main>
+
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
