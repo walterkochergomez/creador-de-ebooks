@@ -155,7 +155,85 @@ function aplicarZoom(cambio) {
 document.getElementById('btn-zoom-in').addEventListener('click', () => aplicarZoom(0.1));
 document.getElementById('btn-zoom-out').addEventListener('click', () => aplicarZoom(-0.1));
 
-// --- 6. EVALUAR RESPUESTAS ---
+// --- 6. EVALUAR RESPUESTAS DE LA PÁGINA ACTUAL ---
 document.getElementById('btn-evaluate').addEventListener('click', () => {
-    alert("Pronto implementaremos la validación de respuestas. ¡Asegúrate de haber asignado las respuestas correctas en el Creador!");
+    let puntosObtenidos = 0;
+    let puntosTotales = 0;
+
+    // Recorremos todos los elementos dibujados en la página actual
+    canvas.getObjects().forEach(function(obj) {
+        if (!obj.customData) return;
+
+        const data = obj.customData;
+
+        // --- REVISIÓN: CAJA DE TEXTO ---
+        if (data.type === 'text' && data.correctAnswer) {
+            puntosTotales += data.points || 0;
+            
+            // Limpiamos espacios extra y pasamos todo a minúsculas para comparar justamente
+            const respuestaAlumno = obj.text.trim().toLowerCase();
+            const respuestaEsperada = data.correctAnswer.trim().toLowerCase();
+
+            if (respuestaAlumno === respuestaEsperada) {
+                // ¡CORRECTO! Fondo verde suave, texto verde oscuro
+                obj.set({ 
+                    backgroundColor: '#dcfce7', 
+                    fill: '#166534',
+                    borderColor: '#166534'
+                });
+                puntosObtenidos += data.points || 0;
+            } else {
+                // ¡INCORRECTO! Fondo rojo suave, texto rojo oscuro
+                obj.set({ 
+                    backgroundColor: '#fee2e2', 
+                    fill: '#991b1b',
+                    borderColor: '#991b1b'
+                });
+                
+                // Opcional: Le mostramos al alumno cuál era la respuesta correcta
+                // obj.set('text', obj.text + ` (Correcto: ${data.correctAnswer})`);
+            }
+            
+            // Bloqueamos la caja para que ya no la pueda editar después de revisar
+            obj.set('editable', false);
+            obj.set('hoverCursor', 'default');
+        }
+
+        // --- REVISIÓN: OPCIÓN MÚLTIPLE (CHECKBOX) ---
+        if (data.type === 'choice') {
+            puntosTotales += data.points || 0;
+            
+            // Comparamos si el estado que marcó el alumno es igual al que definió el profe
+            // (Ej: Si era falsa y no la marcó = Correcto. Si era verdadera y la marcó = Correcto).
+            const esCorrecto = (data.isCorrect === obj.studentChecked);
+
+            if (esCorrecto) {
+                // ¡CORRECTO! Borde verde. Si la marcó, se rellena de verde.
+                obj.set({ 
+                    stroke: '#166534', 
+                    fill: obj.studentChecked ? '#166534' : '#ffffff'
+                });
+                puntosObtenidos += data.points || 0;
+            } else {
+                // ¡INCORRECTO! Borde rojo. Si la marcó por error, se rellena de rojo.
+                obj.set({ 
+                    stroke: '#991b1b', 
+                    fill: obj.studentChecked ? '#991b1b' : '#ffffff'
+                });
+            }
+
+            // Desactivamos el evento de clic para que no la cambie después de revisar
+            obj.off('mousedown');
+            obj.set('hoverCursor', 'default');
+        }
+    });
+
+    // Refrescamos el lienzo para que aparezcan los colores
+    canvas.renderAll();
+
+    // Mostramos el resultado
+    alert(`¡Revisión completada!\nHas obtenido ${puntosObtenidos} de ${puntosTotales} puntos posibles en esta página.`);
+    
+    // Ocultamos el botón de evaluar para que no lo presione dos veces
+    document.getElementById('btn-evaluate').style.display = 'none';
 });
