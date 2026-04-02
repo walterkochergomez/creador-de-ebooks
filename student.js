@@ -1,19 +1,15 @@
-// Inicializar el lienzo (sin fondo al principio)
 const canvas = new fabric.Canvas('student-canvas', { backgroundColor: '#e2e8f0' });
 
-let lessonData = {}; // Aquí guardaremos todo el JSON
+let lessonData = {}; 
 let currentPageNum = 1;
 let totalPages = 1;
-let currentAudio = null; // Para evitar que suenen dos audios a la vez
+let currentAudio = null; 
 
-// Referencias DOM
 const pageIndicator = document.getElementById('page-indicator');
 const btnEvaluate = document.getElementById('btn-evaluate');
 
-// --- 1. CARGAR EL ARCHIVO JSON ---
-document.getElementById('btn-load-lesson').addEventListener('click', () => {
-    document.getElementById('file-lesson').click();
-});
+// --- 1. CARGAR LECCIÓN ---
+document.getElementById('btn-load-lesson').addEventListener('click', () => document.getElementById('file-lesson').click());
 
 document.getElementById('file-lesson').addEventListener('change', function(e) {
     const file = e.target.files[0];
@@ -23,13 +19,9 @@ document.getElementById('file-lesson').addEventListener('change', function(e) {
     reader.onload = function(event) {
         try {
             lessonData = JSON.parse(event.target.result);
-            // Averiguar cuántas páginas tiene el JSON (contando las llaves del objeto)
             totalPages = Object.keys(lessonData).length;
             currentPageNum = 1;
-            
-            // Mostrar el botón de revisar respuestas
-            btnEvaluate.style.display = 'inline-block';
-            
+            btnEvaluate.style.display = 'flex';
             renderStudentPage(currentPageNum);
         } catch (error) {
             alert("Error: El archivo no es una lección válida.");
@@ -38,96 +30,89 @@ document.getElementById('file-lesson').addEventListener('change', function(e) {
     reader.readAsText(file);
 });
 
-// --- 2. RENDERIZAR LA PÁGINA PARA EL ESTUDIANTE ---
+// --- 2. RENDERIZAR Y BLOQUEAR OBJETOS ---
 function renderStudentPage(num) {
     pageIndicator.innerText = `Página ${num} de ${totalPages}`;
-    
-    // Cargamos los datos de la página actual desde el JSON
     const pageJson = lessonData[num];
     if (!pageJson) return;
 
     canvas.loadFromJSON(pageJson, function() {
-        
-        // UNA VEZ CARGADO, RECORREMOS TODOS LOS OBJETOS PARA "BLOQUEARLOS"
         canvas.getObjects().forEach(function(obj) {
             
-            // Bloqueamos movimiento, rotación y escalado
+            // Congelamos todos los objetos para que no se muevan
             obj.set({
-                selectable: true, // Debe ser seleccionable para poder interactuar
-                hasControls: false, // Quitamos los cuadritos de redimensionar
-                hasBorders: false,  // Quitamos el borde azul de selección
-                lockMovementX: true, // No se puede mover
-                lockMovementY: true, // No se puede mover
-                hoverCursor: 'default'
+                selectable: true, hasControls: false, hasBorders: false, 
+                lockMovementX: true, lockMovementY: true, hoverCursor: 'default'
             });
 
-            // Si es una CAJA DE TEXTO
+            // Lógica Caja de Texto
             if (obj.customData && obj.customData.type === 'text') {
-                obj.set({
-                    editable: true, // El alumno PUEDE escribir
-                    hoverCursor: 'text',
-                    text: '' // Vaciamos la respuesta que dejó el profesor de ejemplo (opcional)
-                });
+                obj.set({ editable: true, hoverCursor: 'text', text: '' });
             }
 
-            // Si es un BOTÓN DE AUDIO
+            // Lógica Botón de Audio
             if (obj.customData && obj.customData.type === 'audio') {
-                obj.set({
-                    editable: false, // El alumno no puede cambiar el texto del botón
-                    hoverCursor: 'pointer'
-                });
-                
-                // Evento al hacer clic en el botón
+                obj.set({ editable: false, hoverCursor: 'pointer' });
                 obj.on('mousedown', function() {
                     const url = obj.customData.audioUrl;
                     if (url) {
-                        if (currentAudio) currentAudio.pause(); // Pausar anterior si lo hay
+                        if (currentAudio) currentAudio.pause();
                         currentAudio = new Audio(url);
-                        currentAudio.play().catch(e => alert("No se pudo reproducir el audio. Verifica la URL."));
-                    } else {
-                        alert("Este botón no tiene un audio asignado.");
+                        currentAudio.play().catch(() => alert("Error al reproducir el audio."));
                     }
                 });
             }
 
-            // Si es una OPCIÓN MÚLTIPLE (Checkbox)
+            // Lógica Checkbox
             if (obj.customData && obj.customData.type === 'choice') {
                 obj.set({ hoverCursor: 'pointer' });
-                // Le agregamos una propiedad temporal para saber si el alumno la marcó
                 obj.studentChecked = false; 
-                
-                // Evento al hacer clic en el cuadrito
                 obj.on('mousedown', function() {
-                    obj.studentChecked = !obj.studentChecked; // Cambia el estado
-                    
-                    if (obj.studentChecked) {
-                        obj.set('fill', '#3b82f6'); // Se pinta azul al marcar
-                    } else {
-                        obj.set('fill', '#ffffff'); // Vuelve a blanco al desmarcar
-                    }
-                    canvas.renderAll(); // Refrescar lienzo
+                    obj.studentChecked = !obj.studentChecked;
+                    obj.set('fill', obj.studentChecked ? '#3b82f6' : '#ffffff');
+                    canvas.renderAll();
                 });
             }
         });
-
-        canvas.renderAll(); // Renderizar los cambios
+        canvas.renderAll();
     });
 }
 
-// --- 3. CONTROLES DE PÁGINA ---
+// --- 3. PAGINACIÓN ---
 function changePage(delta) {
-    if (Object.keys(lessonData).length === 0) return; // Si no hay lección cargada
-
-    // NOTA: En una versión avanzada, aquí guardaríamos lo que el alumno escribió 
-    // antes de cambiar de página. Por ahora, navegamos simple.
+    if (Object.keys(lessonData).length === 0) return;
     
+    // Guardar respuestas actuales antes de cambiar de página
+    lessonData[currentPageNum] = canvas.toJSON(['customData', 'studentChecked']);
+
     let newPageNum = currentPageNum + delta;
     if (newPageNum >= 1 && newPageNum <= totalPages) {
         currentPageNum = newPageNum;
-        if (currentAudio) currentAudio.pause(); // Pausar audio si cambia de página
+        if (currentAudio) currentAudio.pause();
         renderStudentPage(currentPageNum);
     }
 }
-
 document.getElementById('btn-prev-page').addEventListener('click', () => changePage(-1));
 document.getElementById('btn-next-page').addEventListener('click', () => changePage(1));
+
+// --- 4. ZOOM ---
+let zoomActual = 1;
+const anchoBase = 794; const altoBase = 1123;
+
+function aplicarZoom(cambio) {
+    zoomActual += cambio;
+    if (zoomActual < 0.5) zoomActual = 0.5;
+    if (zoomActual > 2.5) zoomActual = 2.5;
+    
+    canvas.setZoom(zoomActual);
+    canvas.setWidth(anchoBase * zoomActual);
+    canvas.setHeight(altoBase * zoomActual);
+    document.getElementById('zoom-level').innerText = Math.round(zoomActual * 100) + '%';
+}
+document.getElementById('btn-zoom-in').addEventListener('click', () => aplicarZoom(0.1));
+document.getElementById('btn-zoom-out').addEventListener('click', () => aplicarZoom(-0.1));
+
+// --- 5. EVALUAR RESPUESTAS (Base para el futuro) ---
+document.getElementById('btn-evaluate').addEventListener('click', () => {
+    alert("¡Aquí implementaremos la lógica que cuenta los puntos sumando las cajas de texto correctas y los checkboxes marcados!");
+});
