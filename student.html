@@ -6,54 +6,41 @@
     <title>Clase Interactiva - Estudiante</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* Estilos específicos para la vista del estudiante */
-        .student-header {
-            background-color: #1e293b; color: white; padding: 15px 30px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .upload-btn {
-            background-color: #3b82f6; color: white; padding: 10px 20px;
-            border: none; border-radius: 6px; cursor: pointer; font-weight: bold;
-        }
-        .upload-btn:hover { background-color: #2563eb; }
-        .eval-btn {
-            background-color: #10b981; color: white; padding: 10px 20px;
-            border: none; border-radius: 6px; cursor: pointer; font-weight: bold;
-        }
-        .eval-btn:hover { background-color: #059669; }
-    </style>
 </head>
 <body>
     <div class="app-container" style="flex-direction: column;">
         
-        <!-- Cabecera del Estudiante -->
         <header class="student-header">
-            <div class="brand">
-                <i class="fas fa-graduation-cap"></i>
-                <h2>Portal del Estudiante</h2>
+            <div class="brand" style="margin-bottom: 0;">
+                <i class="fas fa-graduation-cap"></i><h2>Portal del Estudiante</h2>
             </div>
             
-            <div class="page-controls" style="color: white;">
-                <button id="btn-prev-page" style="color: white;"><i class="fas fa-chevron-left"></i></button>
-                <span id="page-indicator">Carga una lección para empezar</span>
-                <button id="btn-next-page" style="color: white;"><i class="fas fa-chevron-right"></i></button>
+            <div class="page-controls">
+                <button id="btn-prev-page" title="Página Anterior"><i class="fas fa-chevron-left"></i></button>
+                <span id="page-indicator">Carga una lección (.json) para empezar</span>
+                <button id="btn-next-page" title="Página Siguiente"><i class="fas fa-chevron-right"></i></button>
             </div>
 
-            <div>
+            <div class="zoom-controls">
+                <button id="btn-zoom-out" title="Alejar"><i class="fas fa-search-minus"></i></button>
+                <span id="zoom-level">100%</span>
+                <button id="btn-zoom-in" title="Acercar"><i class="fas fa-search-plus"></i></button>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
                 <input type="file" id="file-lesson" accept=".json" style="display: none;">
-                <button class="upload-btn" id="btn-load-lesson"><i class="fas fa-folder-open"></i> Abrir Lección</button>
-                <button class="eval-btn" id="btn-evaluate" style="display: none;"><i class="fas fa-check-double"></i> Revisar Respuestas</button>
+                <button class="btn-primary" id="btn-load-lesson" style="width: auto;"><i class="fas fa-folder-open"></i> Abrir Lección</button>
+                <button class="btn-success" id="btn-evaluate" style="width: auto; display: none;"><i class="fas fa-check-double"></i> Revisar</button>
             </div>
         </header>
 
-        <!-- Área de Trabajo -->
-        <main class="workspace" style="flex-grow: 1; align-items: center;">
-            <div class="canvas-container-outer" style="margin-top: 40px;">
-                <canvas id="student-canvas" width="794" height="1123"></canvas>
+        <main class="workspace" style="flex-grow: 1; display: flex; flex-direction: column; overflow: hidden;">
+            <div class="canvas-container">
+                <div class="canvas-container-outer">
+                    <canvas id="student-canvas" width="794" height="1123"></canvas>
+                </div>
             </div>
         </main>
-
     </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
